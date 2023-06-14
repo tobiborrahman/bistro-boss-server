@@ -7,7 +7,14 @@ require('dotenv').config();
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+// middleware
+const corsOptions = {
+	origin: '*',
+	credentials: true,
+	optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const verifyJWT = (req, res, next) => {
@@ -154,6 +161,7 @@ async function run() {
 			}
 
 			const decodedEmail = req.decoded.email;
+
 			if (email !== decodedEmail) {
 				return res
 					.status(403)
